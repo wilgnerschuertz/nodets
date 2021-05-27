@@ -3,15 +3,17 @@ import { verify } from 'jsonwebtoken';
 
 import authConfig from '../config/auth';
 
+interface TokenPayLoad {
+  iat: number;
+  exp: number;
+  sub: string;
+}
 export default function ensureAuthenticated(
   request: Request,
   response: Response,
   next: NextFunction
 ): void {
-  //Validação do Token JWT
-
   const authHeader = request.headers.authorization;
-  console.log('teste2' + authHeader);
 
   if (!authHeader) {
     throw new Error('JWT Token is missing.');
@@ -22,7 +24,11 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    console.log(decoded);
+    const { sub } = decoded as TokenPayLoad;
+
+    request.user = {
+      id: sub,
+    };
 
     return next();
   } catch {
