@@ -3,7 +3,7 @@ import multer from 'multer';
 import uploadConfig from '../config/upload';
 
 import CreateUserService from '../services/CreateUserService';
-import UpdateAvatarService from '../services/UpdateUserAvatarService';
+// import UpdateAvatarService from '../services/UpdateUserAvatarService';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
@@ -45,7 +45,9 @@ usersRouter.patch(
 
       return response.json(user);
     } catch (err) {
-      return response.status(400).json({ error: err.message });
+      return response
+        .status(400)
+        .json({ message: 'Ops, algo de errado ocorreu', error: err.message });
     }
   }
 );
